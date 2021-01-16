@@ -10,16 +10,21 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.OptimisticLockException;
 import java.util.List;
 
 
 @Repository
 @Transactional
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl implements UserDao{
 
     @Autowired
     private EntityManager entityManager;
 
+    @Override
+    public void create(User user) {
+        entityManager.persist(user);
+    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -40,9 +45,15 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void deleteUser(Long id) {
-        User user = getUserById(id);
-        entityManager.unwrap(Session.class).delete(user);
+        int isSuccessful = entityManager.createQuery("delete from User p where p.id=:id")
+                .setParameter("id",id)
+                .executeUpdate();
+        if (isSuccessful == 0) {
+            throw new OptimisticLockException(" product modified concurrently");
+        }
     }
+
+
 
     @Override
     public User getUserByName(String username) {
@@ -59,5 +70,7 @@ public class UserDaoImpl implements UserDao {
     public void addRole(Role role) {
         entityManager.unwrap(Session.class).save(role);
     }
+
+
 
 }

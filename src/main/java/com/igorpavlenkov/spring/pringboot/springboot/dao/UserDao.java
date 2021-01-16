@@ -21,4 +21,6 @@ public interface UserDao{
     Role getRoleByName(String name);
 
     void addRole(Role role);
+
+    void create(User user);
 }

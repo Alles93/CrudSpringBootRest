@@ -1,4 +1,4 @@
-/*
+
 package com.igorpavlenkov.spring.pringboot.springboot.controller;
 
 import com.igorpavlenkov.spring.pringboot.springboot.model.Role;
@@ -8,16 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Controller
-@RequestMapping("/admin/")
+@RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
@@ -25,7 +22,7 @@ public class AdminController {
 
     private User user;
 
-    @GetMapping(value = "users")
+    @GetMapping()
     public String getUsers(ModelMap model) {
         model.addAttribute("users", userService.getAllUsers());
         return "users";
@@ -35,6 +32,7 @@ public class AdminController {
     public String getUser() {
         return "addUser";
     }
+
 
     @PostMapping(value = "new")
     public String addNewUser(@RequestParam(value = "username") String username,
@@ -76,7 +74,7 @@ public class AdminController {
     }
 
 
-    @GetMapping("delete")
+    @DeleteMapping("delete")
     public String deleteUser(@RequestParam(value = "id") String id) {
 
         Long userId = Long.parseLong(id);
@@ -84,4 +82,4 @@ public class AdminController {
         return "redirect:users";
     }
 }
-*/
+

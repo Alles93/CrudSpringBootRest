@@ -1,3 +1,4 @@
+/*
 package com.igorpavlenkov.spring.pringboot.springboot.controller;
 
 import org.springframework.stereotype.Controller;
@@ -21,3 +22,4 @@ public class LoginController {
     }
 
 }
+*/

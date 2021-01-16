@@ -5,13 +5,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "username")
@@ -29,11 +30,11 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-
+// cascade = CascadeType.ALL
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private Set<Role> roles=new HashSet<>();
 
     public User(String username) {
         this.username = username;
@@ -160,4 +161,7 @@ public class User implements UserDetails {
         return true;
     }
 
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
 }

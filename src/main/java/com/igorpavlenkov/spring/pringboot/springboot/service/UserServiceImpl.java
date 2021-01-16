@@ -7,12 +7,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    @PersistenceContext
+    EntityManager entityManager;
+
+
     @Autowired
     private UserDao userDao;
+
+    @Transactional
+    @Override
+    public void addUser(User user) {
+        entityManager.persist(user);
+    }
+
+
 
     @Transactional(readOnly = true)
     @Override
@@ -47,7 +62,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public Role getRoleByName(String name) {
-
         return userDao.getRoleByName(name);
     }
 
@@ -56,5 +70,4 @@ public class UserServiceImpl implements UserService {
     public void addRole(Role role) {
         userDao.addRole(role);
     }
-
 }
