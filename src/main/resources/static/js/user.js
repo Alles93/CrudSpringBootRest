@@ -30,7 +30,7 @@ $(document).ready(function () {
                     wrapColumn(data.lastname) +
                     wrapColumn(data.email) +
                     wrapColumn(data.age) +
-                   wrapColumn(roles) +
+                    wrapColumn(roles) +
                     "</tr>")
             });
         }

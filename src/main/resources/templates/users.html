@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <div class="myForm">
-                        <form>
+                        <form id = "form">
                             <div class="modal fade" id="editModal" tabindex="-1" role="dialog"
                                  aria-labelledby="editModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
@@ -102,26 +102,33 @@
                                                        value=""/>
                                             </div>
                                             <div class="form-group add-form">
-                                                <label for="role" class="add-form">Role</label>
+                                                <label for="roles" class="add-form">Role</label>
+                                                <!--      <select multiple class="form-control" style="height: 60px"
+                                                              id="roles"
+                                                              name="roles">
+                                                          <option id="ROLE_USER">ROLE_USER</option>
+                                                          <option id="ROLE_ADMIN">ROLE_ADMIN</option>
+                                                      </select>-->
                                                 <select multiple class="form-control" style="height: 60px"
-                                                        id="role"
-                                                        name="role">
-                                                    <option id="ROLE_USER">ROLE_USER</option>
-                                                    <option id="ROLE_ADMIN">ROLE_ADMIN</option>
+                                                        id="Roles"
+                                                        name="roles">
+                                                    <option id="UserRole" value="ROLE_USER">ROLE_USER</option>
+                                                    <option id="ADMINRole" value="ROLE_ADMIN">ROLE_ADMIN</option>
                                                 </select>
                                             </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                                Close
-                                            </button>
-                                            <button type="submit" class="btn btn-primary" data-dismiss="modal"
-                                                    id="editBtn">Edit
-                                            </button>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                    Close
+                                                </button>
+                                                <button type="submit" class="btn btn-primary" data-dismiss="modal"
+                                                        id="editBtn">Edit
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                         </form>
                     </div>
                     <div aria-hidden="true" aria-labelledby="delModalLabel" class="modal fade" id="delModal"
@@ -162,33 +169,37 @@
                                 <form id="newUserForm">
                                     <div class="form-group">
                                         <label class="col-form-label" for="newUsername">Username:</label>
-                                        <input class="form-control" id="newUsername" name="newUsername" type="text"/>
+                                        <input class="form-control" id="newUsername" name="username" type="text"/>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-form-label" for="newLastname">Lastname:</label>
-                                        <input class="form-control" id="newLastname" name="newLastname" type="text"/>
+                                        <input class="form-control" id="newLastname" name="lastname" type="text"/>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-form-label" for="newPassword">Password:</label>
-                                        <input class="form-control" id="newPassword" name="newPassword" type="text"/>
+                                        <input class="form-control" id="newPassword" name="password" type="text"/>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-form-label" for="newEmail">Email:</label>
-                                        <input class="form-control" id="newEmail" name="newEmail" type="text"/>
+                                        <input class="form-control" id="newEmail" name="email" type="text"/>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-form-label" for="newAge">Age:</label>
-                                        <input class="form-control" id="newAge" name="newAge" type="text"/>
+                                        <input class="form-control" id="newAge" name="age" type="text"/>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-group add-form">
                                             <label class="font-weight-bolder">Role</label>
                                             <select multiple class="form-control" style="height: 60px"
                                                     id="newUserRoles"
-                                                    name="role">
-                                                <option id="newUserRole">ROLE_USER</option>
-                                                <option id="newADMINRole">ROLE_ADMIN</option>
+                                                    name="roles">
+                                                <option id="newUserRole" value="ROLE_USER">ROLE_USER</option>
+                                                <option id="newADMINRole" value="ROLE_ADMIN">ROLE_ADMIN</option>
                                             </select>
+                                            <!--   <select multiple size="2" name="roles" >
+                                                   <option value="newADMINRole">ROLE_ADMIN</option>
+                                                   <option selected="selected" value="newUserRole">ROLE_USER</option>
+                                               </select>-->
                                         </div>
                                     </div>
                                     <button type="submit" class="btn btn-success" id="newUserBtn">Add new user</button>

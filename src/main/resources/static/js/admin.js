@@ -33,8 +33,8 @@ $(document).ready(function () {
                 let user = data[i];
                 let roles = data[i].roles.map((role) => role.name).join(', ');
 
-              /* user.roles.forEach(role => roles.push(role.role))
-               console.log(user.roles.map((role)=>role.name).join(','))*/
+                /* user.roles.forEach(role => roles.push(role.role))
+                 console.log(user.roles.map((role)=>role.name).join(','))*/
 
 
                 $("#usersTable tbody").append("<tr id=" + trId + ">" +
@@ -60,11 +60,10 @@ $(document).ready(function () {
                     .then((data) => {
                         let userRoles = data.roles;
                         let roles = "";
-                     //   let roles = data[i].roles.map((role) => role.name).join(', ');
+                        //   let roles = data[i].roles.map((role) => role.name).join(', ');
                         for (let j = 0; j < userRoles.length; j++) {
                             roles += userRoles[j].role + " ";
                         }
-
 
 
                         $('.myForm #id').val(data.id);
@@ -72,13 +71,14 @@ $(document).ready(function () {
                         $('.myForm #lastname').val(data.lastname);
                         $('.myForm #age').val(data.age);
                         $('.myForm #email').val(data.email);
-                        $('.myForm #userRoles').val(roles);
-                        if (roles.includes('ROLE_USER')) {
-                            $('#USER').prop('checked', true);
-                        }
-                        if (roles.includes('ROLE_ADMIN')) {
-                            $('#ADMIN').prop('checked', true);
-                        }
+                        $('.myForm #password').val(data.password);
+                        /*        $('.myForm #userRoles').val(roles);
+                                if (roles.includes('ROLE_USER')) {
+                                    $('#USER').prop('checked', true);
+                                }
+                                if (roles.includes('ROLE_ADMIN')) {
+                                    $('#ADMIN').prop('checked', true);
+                                }*/
                     })
 
                 $('.myForm #editModal').modal();
@@ -88,47 +88,30 @@ $(document).ready(function () {
 
                     console.log("Нажали")
 
-                    let id = document.getElementById('id').value;
-                    let username = document.getElementById('username').value;
-                    let lastname = document.getElementById('lastname').value;
-                    let age = document.getElementById('age').value;
-                    let email = document.getElementById('email').value;
-                    let password = document.getElementById('password').value;
-                    let roleUser = document.getElementById('ROLE_USER')
-                    let roleAdmin = document.getElementById('ROLE_ADMIN')
-                    let rolesArr;
-                    let roleId;
-                    if (roleAdmin) {
-                        rolesArr = roleAdmin.value
-                        roleId = 2;
-                    }
-                    if (roleUser) {
-                        rolesArr = roleUser.value
-                        roleId = 1;
-                    }
-                    if (roleAdmin && roleUser) {
-                        rolesArr = roleAdmin.value, roleUser.value
-                    }
+                    const userData = $('#form').serializeArray().reduce(function (obj, item) {
+                        if (item.name === 'roles')
+                            obj[item.name] = [...obj[item.name], {
+                                name: item.value,
+                                id: item.value === 'ROLE_USER' ? 1 : 2,
+                                users: null
+                            }]
+                        else {
+                            obj[item.name] = item.value;
+                        }
+                        return obj;
+                    }, {roles: []})
+
+                    console.log(userData)
+
 
                     fetch(url, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({
-                            id: id,
-                            username: username,
-                            lastname: lastname,
-                            age: age,
-                            email: email,
-                            password: password,
-                            roles: [{
-                                id: roleId,
-                                role: rolesArr,
-                                authority: rolesArr
-                            }
-                            ]
-                        })
+                        body: JSON.stringify(
+                            userData
+                        )
                     }).then(res => res.json())
                         .then(data => {
                             $('#usersTable tbody').empty();
@@ -163,50 +146,32 @@ $(document).ready(function () {
     function addNewUser() {
         document.getElementById('newUserForm').addEventListener('submit', ev => {
             ev.preventDefault();
-
-            let username = document.getElementById('newUsername').value;
-            let lastname = document.getElementById('newLastname').value;
-            let password = document.getElementById('newPassword').value;
-            let email = document.getElementById('newEmail').value;
-            let age = document.getElementById('newAge').value;
-            let roleUser = document.getElementById('newUserRole')
-            let roleAdmin = document.getElementById('newADMINRole')
-            let rolesArr;
-            let roleId;
-            if (roleAdmin) {
-                rolesArr = roleAdmin.value
-                roleId = 2;
-            }
-            if (roleUser) {
-                rolesArr = roleUser.value
-                roleId = 1;
-            }
+            const userData = $('#newUserForm').serializeArray().reduce(function (obj, item) {
+                if (item.name === 'roles')
+                    obj[item.name] = [...obj[item.name], {
+                        name: item.value,
+                        id: item.value === 'ROLE_USER' ? 1 : 2,
+                        users: null
+                    }]
+                else {
+                    obj[item.name] = item.value;
+                }
+                return obj;
+            }, {roles: []})
 
 
-        /*     if (roleAdmin.checked && roleUser.checked) {
-                 rolesArr = roleAdmin.value, roleUser.value
-             }*/
+            /*     if (roleAdmin.checked && roleUser.checked) {
+                     rolesArr = roleAdmin.value, roleUser.value
+                 }*/
 
             fetch("http://localhost:8080/rest/users/", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    id: null,
-                    username: username,
-                    lastname: lastname,
-                    password: password,
-                    email: email,
-                    age: age,
-                    roles: [{
-                        id: roleId,
-                        role: rolesArr,
-                        authority: rolesArr
-                    }
-                    ]
-                })
-
+                body: JSON.stringify(
+                    userData
+                )
             }).then(res => res.json())
                 .then(data => {
                     $('#usersTable tbody').empty();

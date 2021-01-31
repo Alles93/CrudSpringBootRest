@@ -18,8 +18,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-
     @GetMapping()
     public String userInfo(Principal principal, Model model) {
         String userName = principal.getName();

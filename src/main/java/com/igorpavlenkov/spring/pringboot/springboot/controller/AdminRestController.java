@@ -3,7 +3,6 @@ package com.igorpavlenkov.spring.pringboot.springboot.controller;
 import com.igorpavlenkov.spring.pringboot.springboot.model.User;
 import com.igorpavlenkov.spring.pringboot.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,28 +21,27 @@ public class AdminRestController {
     }
 
     @GetMapping("{id}")
-    public User getUser(@PathVariable("id") Long id)
+    public User getUserById(@PathVariable("id") Long id)
     {
         return userService.getUserById(id);
     }
 
 
     @DeleteMapping(value = "{id}")
-    public void delete(@PathVariable("id") Long id) {
-        userService.getUserById(id);
-        userService.deleteUser(id);
+    public void deleteUser(@PathVariable("id") Long id) {
+        userService.deleteUserById(id);
     }
 
 
     @PostMapping()
-    public User addUser(@RequestBody User user) {
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        userService.addUser(user);
+    public User createUser(@RequestBody User user) {
+        userService.saveUser(user);
         return user;
     }
 
-    @PutMapping("{id}")
-    public User updateUser(@RequestBody User user) {
+    @PutMapping(value = "{id}")
+    public User editUser(@PathVariable("id") Long id, @RequestBody User user) {
+        userService.getUserById(id);
         userService.updateUser(user);
         return user;
     }

@@ -1,33 +1,19 @@
 package com.igorpavlenkov.spring.pringboot.springboot.service;
 
 import com.igorpavlenkov.spring.pringboot.springboot.dao.UserDao;
-import com.igorpavlenkov.spring.pringboot.springboot.model.Role;
 import com.igorpavlenkov.spring.pringboot.springboot.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    @PersistenceContext
-    EntityManager entityManager;
-
-
     @Autowired
     private UserDao userDao;
-
-    @Transactional
-    @Override
-    public void addUser(User user) {
-        entityManager.persist(user);
-    }
-
-
 
     @Transactional(readOnly = true)
     @Override
@@ -44,13 +30,23 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void updateUser(User user) {
+        if (!user.getPassword().startsWith("$")){
+            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        }
         userDao.updateUser(user);
     }
 
     @Transactional
     @Override
-    public void deleteUser(Long id) {
-        userDao.deleteUser(id);
+    public void saveUser(User user) {
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        userDao.saveUser(user);
+    }
+
+    @Transactional
+    @Override
+    public void deleteUserById(Long id) {
+        userDao.deleteUserById(id);
     }
 
     @Transactional
@@ -59,15 +55,5 @@ public class UserServiceImpl implements UserService {
         return userDao.getUserByName(username);
     }
 
-    @Transactional
-    @Override
-    public Role getRoleByName(String name) {
-        return userDao.getRoleByName(name);
-    }
 
-    @Transactional
-    @Override
-    public void addRole(Role role) {
-        userDao.addRole(role);
-    }
 }

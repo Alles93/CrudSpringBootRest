@@ -1,4 +1,4 @@
-package com.igorpavlenkov.spring.pringboot.springboot.config.handler;
+package com.igorpavlenkov.spring.pringboot.springboot.security.handlers;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;

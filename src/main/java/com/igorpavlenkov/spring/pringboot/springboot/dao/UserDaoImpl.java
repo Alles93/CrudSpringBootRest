@@ -1,76 +1,64 @@
 package com.igorpavlenkov.spring.pringboot.springboot.dao;
 
 
-import com.igorpavlenkov.spring.pringboot.springboot.model.Role;
 import com.igorpavlenkov.spring.pringboot.springboot.model.User;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.OptimisticLockException;
+import javax.persistence.NoResultException;
 import java.util.List;
 
 
 @Repository
 @Transactional
-public class UserDaoImpl implements UserDao{
+public class UserDaoImpl implements UserDao {
 
     @Autowired
     private EntityManager entityManager;
 
-    @Override
-    public void create(User user) {
-        entityManager.persist(user);
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public List<User> getAllUsers() {
-        return entityManager.unwrap(Session.class).createQuery("from User").getResultList();
+        return entityManager.createQuery("from User").getResultList();
     }
 
     @Override
     public User getUserById(Long id) {
-        return entityManager.unwrap(Session.class).createQuery("from User where id = '" + id + "'", User.class).getSingleResult();
+        return entityManager.find(User.class, id);
     }
 
     @Override
     public void updateUser(User user) {
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        entityManager.unwrap(Session.class).saveOrUpdate(user);
+        entityManager.merge(user);
+        System.out.println("Пользователь обновлен!");
     }
 
     @Override
-    public void deleteUser(Long id) {
-        int isSuccessful = entityManager.createQuery("delete from User p where p.id=:id")
-                .setParameter("id",id)
-                .executeUpdate();
-        if (isSuccessful == 0) {
-            throw new OptimisticLockException(" product modified concurrently");
-        }
+    public void saveUser(User user) {
+        entityManager.merge(user);
+        System.out.println("Пользователь создан!");
     }
 
+    @Override
+    public void deleteUserById(Long id) {
+        entityManager.createQuery("delete from User p where p.id=:id")
+                .setParameter("id", id)
+                .executeUpdate();
+    }
 
 
     @Override
     public User getUserByName(String username) {
-        return entityManager.unwrap(Session.class).createQuery("from User where username = '" + username + "'", User.class).getSingleResult();
+        try {
+            User user = (User) entityManager.createQuery("select u from User u where u.username=:username")
+                    .setParameter("username", username)
+                    .getSingleResult();
+            return user;
+        } catch (NoResultException ex) {
+            return null;
+        }
     }
-
-    @Override
-    public Role getRoleByName(String name) {
-
-        return entityManager.unwrap(Session.class).createQuery("from Role where name = '" + name + "'", Role.class).getSingleResult();
-    }
-
-    @Override
-    public void addRole(Role role) {
-        entityManager.unwrap(Session.class).save(role);
-    }
-
-
 
 }
