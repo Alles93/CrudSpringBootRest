@@ -15,7 +15,7 @@
     <nav class="p-3 mb-2 bg-dark text-white">
         <div class="text-white bg-dark"> </b></div>
         Your login is:
-        <div th:inline="text" class="navbar-brand"> [[${#httpServletRequest.getRemoteUser()}]] with
+        <div th:inline="text" class="navbar-brand"> [[${#httpServletRequest.getUserPrincipal().getName()}]] with
             roles:
             USER  </b></div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -28,7 +28,6 @@
     <div class="row align-items-start">
         <div class="col-2">
             <div class="nav flex-column nav-pills" aria-orientation="vertical">
-                <a class="nav-link nav-link" href="/admin" role="tab">Admin</a>
                 <a class="nav-link active" href="/user" role="tab">User</a>
             </div>
         </div>

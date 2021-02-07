@@ -16,7 +16,7 @@ $(document).ready(function () {
                     "<th>LastName</th>" +
                     "<th>EMail</th>" +
                     "<th>Age</th>" +
-                    "<th>Role</th>" +
+                 /*   "<th>Role</th>" +*/
                     "</tr>");
 
                 let trId = data.id;
@@ -30,7 +30,7 @@ $(document).ready(function () {
                     wrapColumn(data.lastname) +
                     wrapColumn(data.email) +
                     wrapColumn(data.age) +
-                    wrapColumn(roles) +
+                  /*  wrapColumn(roles) +*/
                     "</tr>")
             });
         }

@@ -17,6 +17,7 @@ public interface UserService {
     void saveUser(User user);
 
     void deleteUserById(Long id);
+   void createNewUserAfterOAuthLoginSuccess(User user);
 
 
 }

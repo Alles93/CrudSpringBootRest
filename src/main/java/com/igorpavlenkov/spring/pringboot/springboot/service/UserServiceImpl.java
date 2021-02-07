@@ -1,6 +1,7 @@
 package com.igorpavlenkov.spring.pringboot.springboot.service;
 
 import com.igorpavlenkov.spring.pringboot.springboot.dao.UserDao;
+import com.igorpavlenkov.spring.pringboot.springboot.model.AuthenticationProvider;
 import com.igorpavlenkov.spring.pringboot.springboot.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,6 +50,12 @@ public class UserServiceImpl implements UserService {
         userDao.deleteUserById(id);
     }
 
+    @Override
+    public void createNewUserAfterOAuthLoginSuccess(User user) {
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        userDao.saveUser(user);
+    }
+
     @Transactional
     @Override
     public User getUserByName(String username) {
@@ -56,4 +63,21 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    public void createNewUserAfterOAuthLoginSuccess(String userName, String lastName, String email, AuthenticationProvider provider) {
+        User user = new User();
+        user.setUsername(userName);
+        user.setAge(999);
+        user.setEmail(email);
+        user.setLastname(lastName);
+        user.setPassword("***");
+        user.setAuthenticationProvider(provider);
+        userDao.saveUser(user);
+    }
+
+    public void updateNewUserAfterOAuthLoginSuccess(User user, String name, AuthenticationProvider google) {
+        user.setUsername(name);
+        user.setAuthenticationProvider(google);
+
+        userDao.updateUser(user);
+    }
 }
